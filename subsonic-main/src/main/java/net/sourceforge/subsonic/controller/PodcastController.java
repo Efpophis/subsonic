@@ -74,7 +74,11 @@ public class PodcastController extends ParameterizableViewController {
 
             // Rewrite URLs in case we're behind a proxy.
             if (settingsService.isRewriteUrlEnabled()) {
-                String referer = request.getHeader("referer");
+                String referer = request.getHeader("subsonic-podcast-base-url");
+		
+		if ( referer == null )
+		   referer = request.getHeader("referer");
+		
                 url = StringUtil.rewriteUrl(url, referer);
             }
 

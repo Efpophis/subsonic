@@ -672,7 +672,18 @@ public class SettingsService {
     }
 
     public boolean isLicenseValid(String email, String license) {
-        return true;
+        if (email == null){ 
+            return false;
+        }
+	
+	    if (license == null) {
+	        // self-license now
+	        license = StringUtil.md5Hex(email.toLowerCase());
+	        setLicenseCode( license );
+	        setLicenseDate( new Date() );
+	    }
+	
+        return license.equalsIgnoreCase(StringUtil.md5Hex(email.toLowerCase()));
     }
 
     public LicenseInfo getLicenseInfo() {
@@ -1399,7 +1410,6 @@ public class SettingsService {
         String email = getLicenseEmail();
         Date date = getLicenseDate();
         licenseValidated = true;
-        return;
     }
 
     public synchronized void scheduleLicenseValidation() {
